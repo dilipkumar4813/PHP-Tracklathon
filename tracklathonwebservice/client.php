@@ -25,7 +25,7 @@
 	print_r ($res1);
 
 	echo "<br/><br/><b>Update profile webservice</b><br/>";
-	$res1=$client->call('updateProfile',array("0","Dilip","kumar","dilipkumar4813@gmail.com","test"));
+	$res1=$client->call('updateProfile',array("0","Dilip","kumar","dilipkumar4813@gmail.com","9739388304","test"));
 	print_r ($res1);
 
 	echo "<br/><br/><b>Set location webservice</b><br/>";

@@ -31,7 +31,7 @@
 
 	$server->register(
 			'updateProfile',	//Function that is being called
-			array("id"=>"xsd:string","firstname"=>"xsd:string","lastname"=>"xsd:string","emailid"=>"xsd:string","password"=>"xsd:string",),		//Input sent to the function if it is array() then input is zero
+			array("id"=>"xsd:string","firstname"=>"xsd:string","lastname"=>"xsd:string","emailid"=>"xsd:string","phone"=>"xsd:string","password"=>"xsd:string",),		//Input sent to the function if it is array() then input is zero
 			array("return"=>"xsd:string") //Ouput datatype
 		);
 
