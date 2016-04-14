@@ -114,9 +114,9 @@
 	}
 
 	//Webservice to get user profile
-	function getProfile($id){
+	function getProfile($emailid){
 		$doc = array();
-		$doc['_id'] = intval($id);
+		$doc['username'] = $emailid;
 
 		$str = "";
 
@@ -174,6 +174,11 @@
 
 		$str = "{\"status\":1}";
 		return $str;
+
+	}
+
+	//Webservice to create an trip
+	function createPlan($id,$title,$description,$contacts,$location){
 
 	}
 

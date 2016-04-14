@@ -43,7 +43,7 @@
 
 	$server->register(
 				'getProfile',	//Function that is being called
-				array("id"=>"xsd:string"),					  //Input sent to the function if it is array() then input is zero
+				array("emailid"=>"xsd:string"),					  //Input sent to the function if it is array() then input is zero
 				array("return"=>"xsd:string") //Ouput datatype
 			);
 

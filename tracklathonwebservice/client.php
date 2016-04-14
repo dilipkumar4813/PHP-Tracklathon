@@ -17,7 +17,7 @@
 	print_r ($res1);
 
 	echo "<br/><br/><b>Get profile webservice</b><br/>";
-	$res1=$client->call('getProfile',array("0"));
+	$res1=$client->call('getProfile',array("dilipkumar4813@gmail.com"));
 	print_r ($res1);
 
 	echo "<br/><br/><b>User authentication webservice</b><br/>";
