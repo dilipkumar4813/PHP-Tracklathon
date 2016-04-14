@@ -76,7 +76,7 @@
 		return $str;
 	}
 
-	function updateProfile($id,$firstname,$lastname,$emailid,phone,$password){
+	function updateProfile($id,$firstname,$lastname,$emailid,$phone,$password){
 		$sel = array();
 		$sel['_id'] = intval($id);
 
