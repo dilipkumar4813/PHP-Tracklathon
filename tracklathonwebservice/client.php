@@ -3,7 +3,7 @@
 	require_once 'lib/nusoap.php'; 
 
 	//Creating a soap client object
-	$client = new nusoap_client("http://localhost/tracklathon/tracklathonwebservice/service.php?wsdl");
+	$client = new nusoap_client("http://52.38.240.173/tracklathonwebservice/service.php?wsdl");
 	
 	echo "<center><h1>Calling the functions Registered in the Web Service</h1></center>";
 	echo "<center><h2>Tracklathon</h2></center>";
