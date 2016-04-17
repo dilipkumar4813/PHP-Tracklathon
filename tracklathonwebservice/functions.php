@@ -35,8 +35,11 @@
 
 		insertion("users",$doc);
 
+		$empty = array();
 		$location = array();
 		$location['_id'] = intval($big);
+		$location['viewercontacts'] = $empty;
+		$location['contacts'] = $empty;
 		insertion("location",$location);
 			
 		//$doc1 = array();
@@ -222,8 +225,41 @@
 		{
 			
 			foreach($task['contacts'] as $key => $value){
-				$str.="{\"id\":\"".$value."\",";
-				$str.="\"name\":\"".$key."\"},";
+				$str.="{\"id\":\"".$key."\",";
+				$str.="\"name\":\"".$value."\"},";
+				$i++;
+			}
+		}
+
+		if($i==0)
+		{
+			$str.="{}";
+		}
+		else
+		{
+			$str = rtrim($str, ",");
+		}
+		$str .= "]}";
+
+		return $str;
+	}
+
+	//Webservice to get all the user that can view your location
+	function getYourLocationViewer($id){
+		$doc = array();
+		$doc['_id'] = intval($id);
+		$cursor = selection("location",$doc);
+		$i = 0;
+		$username="";
+		
+		//Conversion to the json format required
+		$str = "{\"contacts\":[";
+		foreach($cursor as $task)
+		{
+			
+			foreach($task['viewercontacts'] as $key => $value){
+				$str.="{\"id\":\"".$key."\",";
+				$str.="\"name\":\"".$value."\"},";
 				$i++;
 			}
 		}
@@ -242,12 +278,13 @@
 	}
 
 	//Webservice to share the user location
-	function shareLocation($id,$sid){
+	function shareLocation($id,$username){
 		$doc = array();
-		$doc['_id'] = intval($id);
+		$doc['username'] = $username;
 		$sel = array();
-		$username = "";
+		$sid = "";
 		$str = "";
+		$yourUsername = "";
 
 		$cursor = selection("users",$doc);
 		$i = 0;
@@ -256,18 +293,34 @@
 		foreach($cursor as $task)
 		{
 			
-			$username = $task['username'];
+			$sid = $task['_id'];
 			$i++;
 		}
 
-		if($i==0){
+		$yourDetails = array();
+		$yourDetails['_id'] = intval($id);
+
+		$cursorYours = selection("users",$yourDetails);
+		$j = 0;
+		
+		//Conversion to the json format required
+		foreach($cursorYours as $taskYours)
+		{
+			
+			$yourUsername = $taskYours['username'];
+			$j++;
+		}
+
+		
+
+		if(($i==0)||($j==0)){
 			$str = "{\"status\":0}";
 			return $str;
 		}else{
 			$sel['_id'] = intval($sid);
 
 			$contacts = array();
-			$contacts[$id] = $username;
+			$contacts[$id] = $yourUsername;
 
 			$cursorContacts = selection("location",$sel);
 			
@@ -282,6 +335,27 @@
 			$update['contacts'] = $contacts;
 
 			updation("location",$sel,$update);
+
+			//Add the members who can view you into your location table
+			$yourAccount = array();
+			$yourAccount['_id'] = intval($id);
+
+			$yourViewers = array();
+			$yourViewers[$sid] = $username;
+			
+			$cursorContactsViewers = selection("location",$yourAccount);
+			
+			foreach($cursorContactsViewers as $task2)
+			{
+				foreach($task2['viewercontacts'] as $key => $value){
+					$yourViewers[$key] = $value;			
+				}
+			}
+
+			$viewers = array();
+			$viewers['viewercontacts'] = $yourViewers;
+			
+			updation("location",$yourAccount,$viewers);
 
 			$str = "{\"status\":1}";
 			return $str;
@@ -312,7 +386,29 @@
 			}
 		}
 
-		if($i==0)
+		$doc2 = array();
+		$doc2['_id'] = intval($id);
+		$j=0;
+		$cursorYours = selection("location",$doc2);
+
+		$updateYours = array();
+		$contactsYours = array();
+
+		//Conversion to the json format required
+		foreach($cursorYours as $task2)
+		{
+			
+			foreach($task2['viewercontacts'] as $key => $value){
+				if($key != $sid){
+					$contactsYours[$key] = $value;
+				}else{
+					$j++;
+				}
+				
+			}
+		}
+
+		if(($i==0)||($j==0))
 		{
 			$str = "{\"status\":0}";
 		}
@@ -320,6 +416,10 @@
 		{
 			$update['contacts'] = $contacts;
 			updation("location",$doc,$update);
+
+			$updateYours['contacts'] = $contactsYours;
+			updation("location",$doc2,$updateYours);
+			
 			$str = "{\"status\":1}";
 		}
 

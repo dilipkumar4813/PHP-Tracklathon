@@ -66,8 +66,14 @@
 			);
 
 	$server->register(
+				'getYourLocationViewer',	//Function that is being called
+				array("id"=>"xsd:string"),
+				array("return"=>"xsd:string") //Ouput datatype
+			);
+
+	$server->register(
 				'shareLocation',	//Function that is being called
-				array("id"=>"xsd:string","sid"=>"xsd:string"),
+				array("id"=>"xsd:string","username"=>"xsd:string"),
 				array("return"=>"xsd:string") //Ouput datatype
 			);
 

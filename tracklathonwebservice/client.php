@@ -48,6 +48,10 @@
 	print_r ($res1);
 
 	echo "<br/><br/><b>Remove Share Location</b><br/>";
-	$res1=$client->call('removeShareLocation',array("0","2"));
+	$res1=$client->call('removeShareLocation',array("1","3"));
+	print_r ($res1);
+
+	echo "<br/><br/><b>Get your location viewers</b><br/>";
+	$res1=$client->call('getYourLocationViewer',array("1"));
 	print_r ($res1);
 ?>
