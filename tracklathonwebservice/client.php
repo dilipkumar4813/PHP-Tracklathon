@@ -35,4 +35,19 @@
 	echo "<br/><br/><b>Get location webservice</b><br/>";
 	$res1=$client->call('getLocation',array("0"));
 	print_r ($res1);
+
+	echo "<br/><br/><b>Share Location</b><br/>";
+	$res1=$client->call('shareLocation',array("1","2"));
+	print_r ($res1);
+
+	//$res1=$client->call('shareLocation',array("0","1"));
+	//print_r ($res1);
+
+	echo "<br/><br/><b>Get Location Users</b><br/>";
+	$res1=$client->call('getLocationUsers',array("0"));
+	print_r ($res1);
+
+	echo "<br/><br/><b>Remove Share Location</b><br/>";
+	$res1=$client->call('removeShareLocation',array("0","2"));
+	print_r ($res1);
 ?>

@@ -34,6 +34,10 @@
 		$doc['gcmid'] = $gcmid;
 
 		insertion("users",$doc);
+
+		$location = array();
+		$location['_id'] = intval($big);
+		insertion("location",$location);
 			
 		//$doc1 = array();
 		//$doc1['_id'] = intval($big);
@@ -178,11 +182,6 @@
 
 	}
 
-	//Webservice to create an trip
-	function createPlan($id,$title,$description,$contacts,$location){
-
-	}
-
 	//Webservice to get user location information
 	function getLocation($id){
 		$sel = array();
@@ -206,6 +205,130 @@
 		}
 
 		return $str;
+	}
+
+	//Webservice to get all the users
+	function getLocationUsers($id){
+
+		$doc = array();
+		$doc['_id'] = intval($id);
+		$cursor = selection("location",$doc);
+		$i = 0;
+		$username="";
+		
+		//Conversion to the json format required
+		$str = "{\"contacts\":[";
+		foreach($cursor as $task)
+		{
+			
+			foreach($task['contacts'] as $key => $value){
+				$str.="{\"id\":\"".$value."\",";
+				$str.="\"name\":\"".$key."\"},";
+				$i++;
+			}
+		}
+
+		if($i==0)
+		{
+			$str.="{}";
+		}
+		else
+		{
+			$str = rtrim($str, ",");
+		}
+		$str .= "]}";
+
+		return $str;
+	}
+
+	//Webservice to share the user location
+	function shareLocation($id,$sid){
+		$doc = array();
+		$doc['_id'] = intval($id);
+		$sel = array();
+		$username = "";
+		$str = "";
+
+		$cursor = selection("users",$doc);
+		$i = 0;
+		
+		//Conversion to the json format required
+		foreach($cursor as $task)
+		{
+			
+			$username = $task['username'];
+			$i++;
+		}
+
+		if($i==0){
+			$str = "{\"status\":0}";
+			return $str;
+		}else{
+			$sel['_id'] = intval($sid);
+
+			$contacts = array();
+			$contacts[$id] = $username;
+
+			$cursorContacts = selection("location",$sel);
+			
+			foreach($cursorContacts as $task1)
+			{
+				foreach($task1['contacts'] as $key => $value){
+					$contacts[$key] = $value;			
+				}
+			}
+
+			$update = array();
+			$update['contacts'] = $contacts;
+
+			updation("location",$sel,$update);
+
+			$str = "{\"status\":1}";
+			return $str;
+		}
+	}
+
+	//Webservice to unshare the user location
+	function removeShareLocation($id,$sid){
+		$doc = array();
+		$doc['_id'] = intval($sid);
+		$cursor = selection("location",$doc);
+		$i = 0;
+
+		$update = array();
+		$contacts = array();
+
+		//Conversion to the json format required
+		foreach($cursor as $task)
+		{
+			
+			foreach($task['contacts'] as $key => $value){
+				if($key != $id){
+					$contacts[$key] = $value;
+				}else{
+					$i++;
+				}
+				
+			}
+		}
+
+		if($i==0)
+		{
+			$str = "{\"status\":0}";
+		}
+		else
+		{
+			$update['contacts'] = $contacts;
+			updation("location",$doc,$update);
+			$str = "{\"status\":1}";
+		}
+
+		return $str;
+	}
+
+	//Webservice to create an trip
+	function createPlan($id,$title,$description,$contacts,$location){
+
 	}
 	
 	function sendnotification($gid, $clientid,$jobid) {
