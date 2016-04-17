@@ -417,7 +417,7 @@
 			$update['contacts'] = $contacts;
 			updation("location",$doc,$update);
 
-			$updateYours['contacts'] = $contactsYours;
+			$updateYours['viewercontacts'] = $contactsYours;
 			updation("location",$doc2,$updateYours);
 			
 			$str = "{\"status\":1}";
