@@ -48,10 +48,18 @@
 	print_r ($res1);
 
 	echo "<br/><br/><b>Remove Share Location</b><br/>";
-	$res1=$client->call('removeShareLocation',array("1","3"));
+	$res1=$client->call('removeShareLocation',array("1","2"));
 	print_r ($res1);
 
 	echo "<br/><br/><b>Get your location viewers</b><br/>";
 	$res1=$client->call('getYourLocationViewer',array("1"));
+	print_r ($res1);
+
+	echo "<br/><br/><b>Create plan/event webservice</b><br/>";
+	$res1=$client->call('createPlan',array("1","Antharagange","Boot camp at 5 o clock","500Rs","1.dilip,2.testo","Antharagange","13.05","17.5","24/04/2016","14:30"));
+	print_r ($res1);
+
+	echo "<br/><br/><b>Edit plan/event webservice</b><br/>";
+	$res1=$client->call('editPlan',array("1","1","Antharagange","Boot camp at 5 o clock","500Rs","1.dilip,2.testo","Antharagange","13.05","17.5","24/04/2016","14:30"));
 	print_r ($res1);
 ?>

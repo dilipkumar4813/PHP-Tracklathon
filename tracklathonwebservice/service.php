@@ -82,6 +82,19 @@
 				array("id"=>"xsd:string","sid"=>"xsd:string"),
 				array("return"=>"xsd:string") //Ouput datatype
 			);
+
+	$server->register(
+				'createPlan',	//Function that is being called
+				array("id"=>"xsd:string","title"=>"xsd:string","description"=>"xsd:string","price"=>"xsd:string","contacts"=>"xsd:string","location"=>"xsd:string","latitude"=>"xsd:string","longitude"=>"xsd:string","date"=>"xsd:string","time"=>"xsd:string"),
+				array("return"=>"xsd:string") //Ouput datatype
+			);
+
+	$server->register(
+				'editPlan',	//Function that is being called
+				array("eventId"=>"xsd:string","id"=>"xsd:string","title"=>"xsd:string","description"=>"xsd:string","price"=>"xsd:string","contacts"=>"xsd:string","location"=>"xsd:string","latitude"=>"xsd:string","longitude"=>"xsd:string","date"=>"xsd:string","time"=>"xsd:string"),
+				array("return"=>"xsd:string") //Ouput datatype
+			);
+	
 	$HTTP_RAW_POST_DATA = isset($HTTP_RAW_POST_DATA)? $HTTP_RAW_POST_DATA : '';
 	$server->service($HTTP_RAW_POST_DATA); 
 ?>

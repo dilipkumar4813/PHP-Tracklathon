@@ -429,8 +429,135 @@
 	}
 
 	//Webservice to create an trip
-	function createPlan($id,$title,$description,$contacts,$location){
+	function createPlan($id,$title,$description,$price,$contacts,$location,$latitude,$longitude,$date,$time){
+		
+		$cursor = selection("events","");
+		$big = 0;
 
+		foreach($cursor as $task)
+		{
+			$idd = intval($task['_id']);
+			if($idd>$big)
+			{
+				$big = $idd;
+			}
+		}
+
+		$groupMembers = array();
+		
+
+		$initial = array();
+		$initial = explode(",",$contacts);
+
+		foreach($initial as $separate){
+			$sp = array();
+			$sp = explode(".",$separate);
+			
+			$groupMembers[$sp[0]]=$sp[1];	
+		}
+
+		$big++;
+		$doc = array();
+		$doc['_id'] = intval($big);
+		$doc['user_id'] = intval($id);
+		$doc['title'] = $title;
+		$doc['description'] = $description;
+		$doc['price'] = $price;
+		$doc['group'] = $groupMembers;
+		$doc['location'] = $location;
+		$doc['latitude'] = $latitude;
+		$doc['longitude'] = $longitude;
+		$doc['date'] = $date;
+		$doc['time'] = $time;
+
+		insertion("events",$doc);
+
+		//Notifications table
+		$cursor2 = selection("notifications","");
+		$big2 = 0;
+
+		foreach($cursor2 as $task2)
+		{
+			$idd2 = intval($task2['_id']);
+			if($idd2>$big2)
+			{
+				$big2 = $idd2;
+			}
+		}
+
+		$big2++;
+		$notification = array();
+		$notification['_id'] = intval($big2);
+		$notification['title'] = "Plan created";
+		$notification['description'] = $title;
+		$notification['user_id'] = intval($id);
+		$notification['event_id'] = intval($big);
+
+		insertion("notifications",$notification);
+
+		$str = "{\"status\":1}";
+
+		return $str;
+	}
+
+	//Webservice to create an trip
+	function editPlan($eventId,$id,$title,$description,$price,$contacts,$location,$latitude,$longitude,$date,$time){
+		$sel = array();
+		$sel['_id'] = intval($eventId);
+
+		$groupMembers = array();
+		
+
+		$initial = array();
+		$initial = explode(",",$contacts);
+
+		foreach($initial as $separate){
+			$sp = array();
+			$sp = explode(".",$separate);
+			
+			$groupMembers[$sp[0]]=$sp[1];	
+		}
+
+		$doc = array();
+		$doc['user_id'] = intval($id);
+		$doc['title'] = $title;
+		$doc['description'] = $description;
+		$doc['price'] = $price;
+		$doc['group'] = $groupMembers;
+		$doc['location'] = $location;
+		$doc['latitude'] = $latitude;
+		$doc['longitude'] = $longitude;
+		$doc['date'] = $date;
+		$doc['time'] = $time;
+
+		updation("events",$sel,$doc);
+
+		//Notifications table
+		$cursor2 = selection("notifications","");
+		$big2 = 0;
+
+		foreach($cursor2 as $task2)
+		{
+			$idd2 = intval($task2['_id']);
+			if($idd2>$big2)
+			{
+				$big2 = $idd2;
+			}
+		}
+
+		$big2++;
+		$notification = array();
+		$notification['_id'] = intval($big2);
+		$notification['title'] = "Plan created";
+		$notification['description'] = $title;
+		$notification['user_id'] = intval($id);
+		$notification['event_id'] = intval($eventId);
+		
+		insertion("notifications",$notification);
+
+		$str = "{\"status\":1}";
+
+		return $str;
 	}
 	
 	function sendnotification($gid, $clientid,$jobid) {
