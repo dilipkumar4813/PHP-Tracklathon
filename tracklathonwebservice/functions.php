@@ -559,6 +559,22 @@
 
 		return $str;
 	}
+
+	//Webservice to delete the events and notifications
+	function deletePlan($eventId){
+		$doc = array();
+		$doc['_id'] = intval($eventId);
+		
+		$sel = array();
+		$doc['event_id'] = intval($eventId);
+
+		deletion("events",$doc);
+		deletion("notifications",$doc);
+
+		$str = "{\"status\":1}";
+
+		return $str;	
+	}
 	
 	function sendnotification($gid, $clientid,$jobid) {
         $registatoin_ids = array($gid);

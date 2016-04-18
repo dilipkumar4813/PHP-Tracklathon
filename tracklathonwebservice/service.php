@@ -94,6 +94,12 @@
 				array("eventId"=>"xsd:string","id"=>"xsd:string","title"=>"xsd:string","description"=>"xsd:string","price"=>"xsd:string","contacts"=>"xsd:string","location"=>"xsd:string","latitude"=>"xsd:string","longitude"=>"xsd:string","date"=>"xsd:string","time"=>"xsd:string"),
 				array("return"=>"xsd:string") //Ouput datatype
 			);
+
+	$server->register(
+				'deletePlan',	//Function that is being called
+				array("eventId"=>"xsd:string"),
+				array("return"=>"xsd:string") //Ouput datatype
+			);
 	
 	$HTTP_RAW_POST_DATA = isset($HTTP_RAW_POST_DATA)? $HTTP_RAW_POST_DATA : '';
 	$server->service($HTTP_RAW_POST_DATA); 
