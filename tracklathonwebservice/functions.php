@@ -29,6 +29,7 @@
 		$doc['firstname']= $firstname;
 		$doc['lastname']= $lastname;
 		$doc['username'] = $emailid;
+		$doc['phone'] = "";
 		$doc['password'] = md5($password);
 		$doc['last_login'] = date("Y/m/d");
 		$doc['gcmid'] = $gcmid;
@@ -138,6 +139,7 @@
 			$str.= ",\"firstname\":\"".$task['firstname'];
 			$str.= "\",\"lastname\":\"".$task['lastname'];
 			$str.= "\",\"username\":\"".$task['username'];
+			$str.= "\",\"phone\":\"".$task['phone'];
 			$str.= "\",\"gcmid\":\"".$task['gcmid']."\"}";
 			$i++;
 		}
