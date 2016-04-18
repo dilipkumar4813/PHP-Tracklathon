@@ -100,6 +100,12 @@
 				array("eventId"=>"xsd:string"),
 				array("return"=>"xsd:string") //Ouput datatype
 			);
+
+	$server->register(
+				'viewPlans',	//Function that is being called
+				array("id"=>"xsd:string"),
+				array("return"=>"xsd:string") //Ouput datatype
+			);
 	
 	$HTTP_RAW_POST_DATA = isset($HTTP_RAW_POST_DATA)? $HTTP_RAW_POST_DATA : '';
 	$server->service($HTTP_RAW_POST_DATA); 

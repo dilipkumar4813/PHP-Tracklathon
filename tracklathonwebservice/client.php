@@ -62,4 +62,8 @@
 	echo "<br/><br/><b>Edit plan/event webservice</b><br/>";
 	$res1=$client->call('editPlan',array("1","1","Antharagange","Boot camp at 5 o clock","500Rs","1.dilip,2.testo","Antharagange","13.05","17.5","24/04/2016","14:30"));
 	print_r ($res1);
+
+	echo "<br/><br/><b>View plan/event webservice</b><br/>";
+	$res1=$client->call('viewPlans',array("1"));
+	print_r ($res1);
 ?>

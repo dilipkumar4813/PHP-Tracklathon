@@ -575,6 +575,36 @@
 
 		return $str;	
 	}
+
+	//Webservice function to get all plans created by the user
+	function viewPlans($id){
+		$doc = array();
+		$doc['user_id'] = intval($id);
+
+		$cursor = selection("events",$doc);
+		$i=0;
+		
+		//Conversion to the json format required
+		$str = "{\"plans\":[";
+		foreach($cursor as $task)
+		{
+				$str.="{\"id\":\"".$task['_id']."\",";
+				$str.="\"title\":\"".$task['title']."\"},";
+				$i++;
+		}
+
+		if($i==0)
+		{
+			$str.="{}";
+		}
+		else
+		{
+			$str = rtrim($str, ",");
+		}
+		$str .= "]}";
+
+		return $str;
+	}
 	
 	function sendnotification($gid, $clientid,$jobid) {
         $registatoin_ids = array($gid);
