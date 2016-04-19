@@ -66,4 +66,8 @@
 	echo "<br/><br/><b>View plan/event webservice</b><br/>";
 	$res1=$client->call('viewPlans',array("1"));
 	print_r ($res1);
+
+	echo "<br/><br/><b>View notifications webservice</b><br/>";
+	$res1=$client->call('viewNotifications',array("1"));
+	print_r ($res1);
 ?>

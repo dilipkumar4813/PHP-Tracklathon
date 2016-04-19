@@ -605,6 +605,38 @@
 
 		return $str;
 	}
+
+	//Webservice to get all notifications with respect to events
+	function viewNotifications($id){
+		$doc = array();
+		$doc['user_id'] = intval($id);
+
+		$cursor = selection("notifications",$doc);
+		$i=0;
+
+		//Conversion to the json format required
+		$str = "{\"plans\":[";
+		foreach($cursor as $task)
+		{
+				$str.="{\"id\":\"".$task['_id']."\",";
+				$str.="\"eventid\":\"".$task['event_id']."\",";
+				$str.="\"description\":\"".$task['description']."\",";
+				$str.="\"title\":\"".$task['title']."\"},";
+				$i++;
+		}
+
+		if($i==0)
+		{
+			$str.="{}";
+		}
+		else
+		{
+			$str = rtrim($str, ",");
+		}
+		$str .= "]}";
+
+		return $str;	
+	}
 	
 	function sendnotification($gid, $clientid,$jobid) {
         $registatoin_ids = array($gid);
