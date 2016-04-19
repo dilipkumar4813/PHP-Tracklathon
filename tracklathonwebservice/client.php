@@ -70,4 +70,8 @@
 	echo "<br/><br/><b>View notifications webservice</b><br/>";
 	$res1=$client->call('viewNotifications',array("1"));
 	print_r ($res1);
+
+	echo "<br/><br/><b>View single notification webservice</b><br/>";
+	$res1=$client->call('viewSingleNotification',array("7"));
+	print_r ($res1);
 ?>
