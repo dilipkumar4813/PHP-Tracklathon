@@ -634,6 +634,7 @@
 		{
 				$str.="{\"id\":\"".$task['_id']."\",";	
 				$str.="\"title\":\"".$task['title']."\",";
+				$str.="\"description\":\"".$task['description']."\",";
 				$str.="\"price\":\"".$task['price']."\",";
 				$str.="\"date\":\"".$task['date']."\",";
 				$str.="\"time\":\"".$task['time']."\",";
