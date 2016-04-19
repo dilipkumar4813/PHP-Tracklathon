@@ -86,4 +86,48 @@
 	echo "<br/><br/><b>GCM Notification</b><br/>";
 	$res1=$client->call('sendnotification',array("APA91bH-mRiuu9G7iDkKGwmgnglBMTqY4U_Kz-QMI2ds2tmZNoS7DdUlhkpye87HKSOXaczC0aNL05rU8buhiDhL_Sv2RXlonHezW7pYg5MXXzRpWwxcdGeGcmA7XxYPQextel7LtBvl","Hello tracklathon","This is a test","0","6543214"));
 	print_r ($res1);
+
+	sendnotification("APA91bH-mRiuu9G7iDkKGwmgnglBMTqY4U_Kz-QMI2ds2tmZNoS7DdUlhkpye87HKSOXaczC0aNL05rU8buhiDhL_Sv2RXlonHezW7pYg5MXXzRpWwxcdGeGcmA7XxYPQextel7LtBvl","Hello tracklathon","This is a test","0","6543214");
+
+	function sendnotification($gid, $msg,$description,$imsg,$eventId) {
+        $registatoin_ids = array($gid);
+		$message = array("m" => $msg,"eventid" => $eventId,"description" => $description,"imsg" => $imsg);
+		
+		// Set POST variables
+        $url = 'https://android.googleapis.com/gcm/send';
+
+        $fields = array(
+            'registration_ids' => $registatoin_ids,
+            'data' => $message,
+			
+        );
+		// Google Cloud Messaging GCM API Key  
+		define("GOOGLE_API_KEY", "AIzaSyC3zQp4SUdAicdmI54gLn0aqWJiutch264");
+								 
+        $headers = array(
+            'Authorization: key=' . GOOGLE_API_KEY,
+            'Content-Type: application/json',
+			'Connection: keep-alive',
+			'Keep-Alive: 300'
+		);
+		
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt ($ch, CURLOPT_SSL_VERIFYHOST, 0);	
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
+
+        // Execute post
+        $result = curl_exec($ch);
+        if ($result === FALSE) {
+            die('Curl failed: ' . curl_error($ch));
+        }
+		
+        // Close connection
+        curl_close($ch);
+        return $result;
+    }
 ?>
