@@ -82,4 +82,8 @@
 	echo "<br/><br/><b>Update GCM</b><br/>";
 	$res1=$client->call('updateGcm',array("0","6543214"));
 	print_r ($res1);
+
+	echo "<br/><br/><b>GCM Notification</b><br/>";
+	$res1=$client->call('sendnotification',array("APA91bH-mRiuu9G7iDkKGwmgnglBMTqY4U_Kz-QMI2ds2tmZNoS7DdUlhkpye87HKSOXaczC0aNL05rU8buhiDhL_Sv2RXlonHezW7pYg5MXXzRpWwxcdGeGcmA7XxYPQextel7LtBvl","Hello tracklathon","This is a test","0","6543214"));
+	print_r ($res1);
 ?>

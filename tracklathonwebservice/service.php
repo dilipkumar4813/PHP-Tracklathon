@@ -130,6 +130,12 @@
 				array("id"=>"xsd:string"),
 				array("return"=>"xsd:string") //Ouput datatype
 			);
+
+	$server->register(
+				'sendnotification',	//Function that is being called
+				array("gid"=>"xsd:string","msg"=>"xsd:string","description"=>"xsd:string","imsg"=>"xsd:string","eventId"=>"xsd:string"),
+				array("return"=>"xsd:string") //Ouput datatype
+			);
 	
 	$HTTP_RAW_POST_DATA = isset($HTTP_RAW_POST_DATA)? $HTTP_RAW_POST_DATA : '';
 	$server->service($HTTP_RAW_POST_DATA); 

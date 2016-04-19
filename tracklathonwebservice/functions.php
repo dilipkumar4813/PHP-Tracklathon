@@ -711,9 +711,9 @@
 		return $str;
 	}
 	
-	function sendnotification($gid, $clientid,$jobid) {
+	function sendnotification($gid, $msg,$description,$imsg,$eventId) {
         $registatoin_ids = array($gid);
-		$message = array("m" => $clientid,"jobid" => $jobid);
+		$message = array("m" => $msg,"eventid" => $eventId,"description" => $description,"imsg" => $imsg);
 		
 		// Set POST variables
         $url = 'https://android.googleapis.com/gcm/send';
@@ -724,7 +724,7 @@
 			
         );
 		// Google Cloud Messaging GCM API Key  
-		define("GOOGLE_API_KEY", "AIzaSyCO72wraXRvx6vnscloDNFpQ2eNEJO8kRY");
+		define("GOOGLE_API_KEY", "AIzaSyC3zQp4SUdAicdmI54gLn0aqWJiutch264");
 								 
         $headers = array(
             'Authorization: key=' . GOOGLE_API_KEY,
@@ -752,5 +752,4 @@
         curl_close($ch);
         return $result;
     }
-	
 ?>
