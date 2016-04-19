@@ -606,6 +606,37 @@
 		return $str;
 	}
 
+	//Webservice to get single plan
+	function viewSinglePlan($id){
+		$doc = array();
+		$doc['_id'] = intval($id);
+
+		$cursor = selection("events",$doc);
+		$i=0;
+
+		//Conversion to the json format required
+		$str = "";
+		foreach($cursor as $task)
+		{
+				$str.="{\"id\":\"".$task['_id']."\",";	
+				$str.="\"title\":\"".$task['title']."\",";
+				$str.="\"price\":\"".$task['price']."\",";
+				$str.="\"date\":\"".$task['date']."\",";
+				$str.="\"time\":\"".$task['time']."\",";
+				$str.="\"location\":\"".$task['location']."\",";
+				$str.="\"latitude\":\"".$task['latitude']."\",";
+				$str.="\"longitude\":\"".$task['longitude']."\"}";
+				$i++;
+		}
+
+		if($i==0)
+		{
+			$str.="{}";
+		}
+
+		return $str;	
+	}
+
 	//Webservice to get all notifications with respect to events
 	function viewNotifications($id){
 		$doc = array();

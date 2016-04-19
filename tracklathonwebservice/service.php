@@ -108,6 +108,12 @@
 			);
 
 	$server->register(
+				'viewSinglePlan',	//Function that is being called
+				array("id"=>"xsd:string"),
+				array("return"=>"xsd:string") //Ouput datatype
+			);
+
+	$server->register(
 				'viewNotifications',	//Function that is being called
 				array("id"=>"xsd:string"),
 				array("return"=>"xsd:string") //Ouput datatype

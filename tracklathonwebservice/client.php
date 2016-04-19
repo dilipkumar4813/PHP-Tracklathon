@@ -74,4 +74,8 @@
 	echo "<br/><br/><b>View single notification webservice</b><br/>";
 	$res1=$client->call('viewSingleNotification',array("7"));
 	print_r ($res1);
+
+	echo "<br/><br/><b>View single plan webservice</b><br/>";
+	$res1=$client->call('viewSinglePlan',array("3"));
+	print_r ($res1);
 ?>
