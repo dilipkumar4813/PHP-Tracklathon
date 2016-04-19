@@ -78,4 +78,8 @@
 	echo "<br/><br/><b>View single plan webservice</b><br/>";
 	$res1=$client->call('viewSinglePlan',array("3"));
 	print_r ($res1);
+
+	echo "<br/><br/><b>Update GCM</b><br/>";
+	$res1=$client->call('updateGcm',array("0","6543214"));
+	print_r ($res1);
 ?>

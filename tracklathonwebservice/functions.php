@@ -156,6 +156,20 @@
 		return $str;
 	}
 
+	//Webservice to update GCM for the profile
+	function updateGcm($id,$gcm){
+		$doc = array();
+		$doc['_id'] = intval($id);
+
+		$update = array();
+		$update['gcm'] = $gcm;
+
+		updation("users",$doc,$update);
+
+		$str = "{\"status\":1}";
+		return $str;
+	}
+
 	//Webservice to set user location
 	function setLocation($id,$latitude,$longitude){
 		$sel = array();

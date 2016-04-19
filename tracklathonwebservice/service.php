@@ -48,6 +48,12 @@
 			);
 
 	$server->register(
+				'updateGcm',	//Function that is being called
+				array("id"=>"xsd:string","gcm"=>"xsd:string"),
+				array("return"=>"xsd:string") //Ouput datatype
+			);
+
+	$server->register(
 				'setLocation',	//Function that is being called
 				array("id"=>"xsd:string","latitude"=>"xsd:string","longitude"=>"xsd:string"),
 				array("return"=>"xsd:string") //Ouput datatype
