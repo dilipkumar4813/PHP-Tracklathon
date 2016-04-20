@@ -580,10 +580,10 @@
 		$doc['_id'] = intval($eventId);
 		
 		$sel = array();
-		$doc['event_id'] = intval($eventId);
+		$sel['event_id'] = intval($eventId);
 
 		deletion("events",$doc);
-		deletion("notifications",$doc);
+		deletion("notifications",$sel);
 
 		$str = "{\"status\":1}";
 
