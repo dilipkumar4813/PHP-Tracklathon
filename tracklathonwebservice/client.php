@@ -86,4 +86,16 @@
 	echo "<br/><br/><b>GCM Notification</b><br/>";
 	$res1=$client->call('sendnotification',array("APA91bH-mRiuu9G7iDkKGwmgnglBMTqY4U_Kz-QMI2ds2tmZNoS7DdUlhkpye87HKSOXaczC0aNL05rU8buhiDhL_Sv2RXlonHezW7pYg5MXXzRpWwxcdGeGcmA7XxYPQextel7LtBvl","Hello tracklathon","This is a test","0","6543214"));
 	print_r ($res1);
+
+	echo "<br/><br/><b>View single plan webservice</b><br/>";
+	$res1=$client->call('viewSinglePlan',array("3"));
+	print_r ($res1);
+
+	echo "<br/><br/><b>View create message webservice</b><br/>";
+	$res1=$client->call('createMessage',array("1","ta","testo","Hi how are you"));
+	print_r($res1);
+
+	echo "<br/><br/><b>View single message webservice</b><br/>";
+	$res1=$client->call('getMessage',array("ta","testo"));
+	print_r($res1);
 ?>

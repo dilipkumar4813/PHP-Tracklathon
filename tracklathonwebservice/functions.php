@@ -435,7 +435,7 @@
 
 			$updateYours['viewercontacts'] = $contactsYours;
 			updation("location",$doc2,$updateYours);
-			
+
 			$str = "{\"status\":1}";
 		}
 
@@ -574,7 +574,6 @@
 		return $str;
 	}
 
-	//Webservice to delete the events and notifications
 	function deletePlan($eventId){
 		$doc = array();
 		$doc['_id'] = intval($eventId);
@@ -589,7 +588,7 @@
 
 		return $str;	
 	}
-
+	
 	//Webservice function to get all plans created by the user
 	function viewPlans($id){
 		$doc = array();
@@ -597,12 +596,12 @@
 
 		$cursor = selection("events",$doc);
 		$i=0;
-		
+
 		//Conversion to the json format required
 		$str = "{\"plans\":[";
 		foreach($cursor as $task)
 		{
-				$str.="{\"id\":\"".$task['_id']."\",";
+				$str.="{\"id\":\"".$task['_id']."\",";	
 				$str.="\"title\":\"".$task['title']."\"},";
 				$i++;
 		}
@@ -711,7 +710,151 @@
 	
 		return $str;
 	}
-	
+
+	//Webservice to create function
+	function createMessage($sid,$susername,$rusername,$message){
+		$doc = array();
+		$doc['sid']  = intval($sid);
+		$doc['susername'] = $susername;
+		$doc['rusername'] = $rusername;
+
+		$rdoc = array();
+		$rdoc['username'] = $rusername;
+
+		$messages = array();
+
+		$i = 0;
+		$j = 0;
+
+		date_default_timezone_set("Asia/Kolkata");
+		
+		$sDate = date('d/m/y');
+		$sTime = date("h:i:s");
+
+		$cursor = selection("users",$rdoc);
+		foreach($cursor as $task)
+		{
+			$doc['rid'] = intval($task['_id']);
+			$i++;
+		}
+
+		if($i==0){
+			return "{\"status\":-1}";
+		}
+
+		$cursor2 = selection("messaging","");
+		$big = 0;
+		foreach($cursor2 as $task2)
+		{
+			$idd = intval($task2['_id']);
+			if($idd>$big)
+			{
+				$big = $idd;
+			}
+			if(($task2['susername']==$susername)&&($task2['rusername']==$rusername))
+			{
+				$k = 0;
+				$mCount = 0;
+				$updation = array();
+				$msg = array();
+				
+								
+				//$updation['messages'] = $task2['messages'];
+								
+				foreach($task2['messages'] as $msgArray){
+
+					$msg['id'] = $msgArray['id'];
+					$msg['sid'] = $msgArray['sid'];
+					$msg['message'] = $msgArray['message'];
+					$msg['date'] = $msgArray['date'];
+					$msg['time'] = $msgArray['time'];
+
+					array_push($messages,$msg);
+					unset($msg);
+				}
+
+				$newMessage = array();
+				$newMessage['id'] = ++$k;
+				$newMessage['sid'] = intval($sid);
+				$newMessage['message'] = $message;
+				$newMessage['date'] = $sDate;
+				$newMessage['time'] = $sTime;
+
+				array_push($messages,$newMessage);
+
+				$updation['messages'] = $messages;
+				updation("messaging",$doc,$updation);
+				$j++;
+				return "{\"status\":2}";
+			}
+		}
+
+		if($j==0){
+			$doc['_id'] = ++$big;
+			$messages['id'] = 1;
+			$messages['sid'] = intval($sid);
+			$messages['message'] = $message;
+			$messages['date'] = $sDate;
+			$messages['time'] = $sTime;
+
+			$doc['tdate'] = $sDate;
+			$doc['ttime'] = $sTime;
+			$doc['messages'] = $messages;
+			insertion("messaging",$doc);
+			return "{\"status\":1}";
+		}
+	}
+
+	//Webservice function to delete the message thread
+	function deleteMessage($susername,$rusername){
+		$doc = array();
+		$doc['susername'] = $susername;
+		$doc['rusername'] = $rusername;
+
+		deletion("messaging",$doc);
+
+		$rdoc = array();
+		$rdoc['susername'] = $rusername;
+		$rdoc['rusername'] = $susername;
+		
+		deletion("messaging",$rdoc);
+		
+		return "{\"status\":1}";
+	}
+
+	//Webservice function to get a message thread
+	function getMessage($susername,$rusername){
+		$doc = array();
+		$doc['susername'] = $susername;
+		$doc['rusername'] = $rusername;
+		$i = 0;
+
+		$str = "{\"messages\":[";
+		$cursor = selection("messaging",$doc);
+		foreach($cursor as $task)
+		{
+			foreach($task['messages'] as $value){
+				$str.="{\"id\":\"".$value['sid']."\",";	
+				$str.="\"message\":\"".$value['message']."\",";
+				$str.="\"date\":\"".$value['date']."\"},";
+				$i++;
+			}
+		}
+
+		if($i==0)
+		{
+			$str.="{}";
+		}
+		else
+		{
+			$str = rtrim($str, ",");
+		}
+		$str .= "]}";
+
+		return $str;
+	}
+
+
 	function sendnotification($gid, $msg,$description,$imsg,$eventId) {
         $registatoin_ids = array($gid);
 		$message = array("m" => $msg,"eventid" => $eventId,"description" => $description,"imsg" => $imsg);
@@ -753,4 +896,5 @@
         curl_close($ch);
         return $result;
     }
+	
 ?>
