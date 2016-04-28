@@ -155,6 +155,12 @@
 				array("return"=>"xsd:string") //Ouput datatype
 			);
 
+	$server->register(
+				'sendMessageNotification',	//Function that is being called
+				array("username"=>"xsd:string","message"=>"xsd:string"),
+				array("return"=>"xsd:string") //Ouput datatype
+			);
+
 	$HTTP_RAW_POST_DATA = isset($HTTP_RAW_POST_DATA)? $HTTP_RAW_POST_DATA : '';
 	$server->service($HTTP_RAW_POST_DATA); 
 ?>

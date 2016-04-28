@@ -98,4 +98,8 @@
 	echo "<br/><br/><b>View single message webservice</b><br/>";
 	$res1=$client->call('getMessage',array("ta","testo"));
 	print_r($res1);
+
+	echo "<br/><br/><b>Send message notification webservice</b><br/>";
+	$res1=$client->call('sendMessageNotification',array("ta","Testing the message functionality"));
+	print_r($res1);
 ?>

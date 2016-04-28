@@ -854,6 +854,21 @@
 		return $str;
 	}
 
+	//Webservice to send message notification to the user
+	function sendMessageNotification($username,$message){
+		$doc = array();
+		$doc['username'] = $username;
+		$gcmid = "";
+
+		$cursor = selection("users",$doc);
+		foreach($cursor as $task)
+		{
+			$gcmid = $task['gcm'];
+		}
+
+		return sendnotification($gcmid,"Messages",$message,"1","0");
+	}
+
 
 	function sendnotification($gid, $msg,$description,$imsg,$eventId) {
         $registatoin_ids = array($gid);
