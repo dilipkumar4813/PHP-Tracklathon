@@ -156,14 +156,14 @@
 			);
 
 	$server->register(
-				'sendMessageNotification',	//Function that is being called
-				array("username"=>"xsd:string","message"=>"xsd:string"),
+				'getMessageInbox',	//Function that is being called
+				array("username"=>"xsd:string"),
 				array("return"=>"xsd:string") //Ouput datatype
 			);
 
 	$server->register(
 				'sendMessageNotification',	//Function that is being called
-				array("username"=>"xsd:string"),
+				array("username"=>"xsd:string","message"=>"xsd:string"),
 				array("return"=>"xsd:string") //Ouput datatype
 			);
 
