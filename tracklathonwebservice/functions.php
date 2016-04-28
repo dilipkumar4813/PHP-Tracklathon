@@ -869,6 +869,53 @@
 		return sendnotification($gcmid,"Messages",$message,"1","0");
 	}
 
+	//Get webservice inbox
+	function getMessageInbox($username){
+		$i = 0;
+		$str = "{\"messages\":[";
+
+		for($j=0;$j<2;$j++){
+			$doc = array();
+			if($j==0){
+				$doc['susername'] = $username;
+			}else{
+				$doc['rusername'] = $username;
+			}
+
+			$cursor = selection("messaging",$doc);
+			foreach ($cursor as $task) {
+				$lastMsg = end($task['messages']);
+				
+				$username = "";
+				if($j==0){
+					$username = $task['rusername'];
+				}else{
+					$username = $task['susername'];
+				}			
+
+				$str.="{\"id\":\"".$lastMsg['sid']."\",";	
+				$str.="\"message\":\"".$lastMsg['message']."\",";
+				$str.="\"username\":\"".$username."\",";
+				$str.="\"time\":\"".$lastMsg['time']."\",";
+				$str.="\"date\":\"".$lastMsg['date']."\"},";
+				$i++;
+				break;
+			}
+		}
+
+		if($i==0)
+		{
+			$str.="{}";
+		}
+		else
+		{
+			$str = rtrim($str, ",");
+		}
+		$str .= "]}";
+
+		return $str;
+	}
+
 
 	function sendnotification($gid, $msg,$description,$imsg,$eventId) {
         $registatoin_ids = array($gid);

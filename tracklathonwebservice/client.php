@@ -102,4 +102,8 @@
 	echo "<br/><br/><b>Send message notification webservice</b><br/>";
 	$res1=$client->call('sendMessageNotification',array("ta","Testing the message functionality"));
 	print_r($res1);
+
+	echo "<br/><br/><b>Get message inbox webservice</b><br/>";
+	$res1=$client->call('getMessageInbox',array("ta"));
+	print_r($res1);
 ?>
