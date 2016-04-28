@@ -713,95 +713,138 @@
 
 	//Webservice to create function
 	function createMessage($sid,$susername,$rusername,$message){
-		$doc = array();
-		$doc['sid']  = intval($sid);
-		$doc['susername'] = $susername;
-		$doc['rusername'] = $rusername;
-
-		$rdoc = array();
-		$rdoc['username'] = $rusername;
-
-		$messages = array();
-
-		$i = 0;
-		$j = 0;
-
-		date_default_timezone_set("Asia/Kolkata");
+		for($cnt = 0;$cnt < 2; $cnt++){
+			$doc = array();
+			//$doc['sid']  = intval($sid);
+			if($cnt==0){
+				$doc['susername'] = $susername;
+				$doc['rusername'] = $rusername;
+			}else{
+				$doc['susername'] = $rusername;
+				$doc['rusername'] = $susername;
+			}
 		
-		$sDate = date('d/m/y');
-		$sTime = date("h:i:s");
 
-		$cursor = selection("users",$rdoc);
-		foreach($cursor as $task)
-		{
-			$doc['rid'] = intval($task['_id']);
-			$i++;
-		}
+			$rdoc = array();
+			$rdoc['username'] = $rusername;
 
-		if($i==0){
-			return "{\"status\":-1}";
-		}
+			$messages = array();
 
-		$cursor2 = selection("messaging","");
-		$big = 0;
-		foreach($cursor2 as $task2)
-		{
-			$idd = intval($task2['_id']);
-			if($idd>$big)
+			$i = 0;
+			$j = 0;
+
+			date_default_timezone_set("Asia/Kolkata");
+			
+			$sDate = date('d/m/y');
+			$sTime = date("h:i:s");
+
+			$cursor = selection("users",$rdoc);
+			foreach($cursor as $task)
 			{
-				$big = $idd;
+				$doc['rid'] = intval($task['_id']);
+				$i++;
 			}
-			if(($task2['susername']==$susername)&&($task2['rusername']==$rusername))
+
+			if($i==0){
+				return "{\"status\":-1}";
+			}
+
+			$cursor2 = selection("messaging","");
+			$big = 0;
+			foreach($cursor2 as $task2)
 			{
-				$k = 0;
-				$mCount = 0;
-				$updation = array();
-				$msg = array();
-				
-								
-				//$updation['messages'] = $task2['messages'];
-								
-				foreach($task2['messages'] as $msgArray){
-
-					$msg['id'] = $msgArray['id'];
-					$msg['sid'] = $msgArray['sid'];
-					$msg['message'] = $msgArray['message'];
-					$msg['date'] = $msgArray['date'];
-					$msg['time'] = $msgArray['time'];
-
-					array_push($messages,$msg);
-					unset($msg);
+				$idd = intval($task2['_id']);
+				if($idd>$big)
+				{
+					$big = $idd;
 				}
+				if(($task2['susername']==$susername)&&($task2['rusername']==$rusername))
+				{
+					$k = 0;
+					$mCount = 0;
+					$updation = array();
+					$msg = array();
+					
+									
+					//$updation['messages'] = $task2['messages'];
+									
+					foreach($task2['messages'] as $msgArray){
 
-				$newMessage = array();
-				$newMessage['id'] = ++$k;
-				$newMessage['sid'] = intval($sid);
-				$newMessage['message'] = $message;
-				$newMessage['date'] = $sDate;
-				$newMessage['time'] = $sTime;
+						$msg['id'] = $msgArray['id'];
+						$msg['sid'] = $msgArray['sid'];
+						$msg['message'] = $msgArray['message'];
+						$msg['date'] = $msgArray['date'];
+						$msg['time'] = $msgArray['time'];
 
-				array_push($messages,$newMessage);
+						array_push($messages,$msg);
+						unset($msg);
+					}
 
-				$updation['messages'] = $messages;
-				updation("messaging",$doc,$updation);
-				$j++;
-				return "{\"status\":2}";
+					$newMessage = array();
+					$newMessage['id'] = ++$k;
+					$newMessage['sid'] = intval($sid);
+					$newMessage['message'] = $message;
+					$newMessage['date'] = $sDate;
+					$newMessage['time'] = $sTime;
+
+					array_push($messages,$newMessage);
+
+					$updation['messages'] = $messages;
+					updation("messaging",$doc,$updation);
+					$j++;
+					return "{\"status\":2}";
+				}else if(($task2['susername']==$rusername)&&($task2['rusername']==$susername)){
+					$k = 0;
+					$mCount = 0;
+					$updation = array();
+					$msg = array();
+					
+									
+					//$updation['messages'] = $task2['messages'];
+									
+					foreach($task2['messages'] as $msgArray){
+
+						$msg['id'] = $msgArray['id'];
+						$msg['sid'] = $msgArray['sid'];
+						$msg['message'] = $msgArray['message'];
+						$msg['date'] = $msgArray['date'];
+						$msg['time'] = $msgArray['time'];
+
+						array_push($messages,$msg);
+						unset($msg);
+					}
+
+					$newMessage = array();
+					$newMessage['id'] = ++$k;
+					$newMessage['sid'] = intval($sid);
+					$newMessage['message'] = $message;
+					$newMessage['date'] = $sDate;
+					$newMessage['time'] = $sTime;
+
+					array_push($messages,$newMessage);
+
+					$updation['messages'] = $messages;
+					updation("messaging",$doc,$updation);
+					$j++;
+					return "{\"status\":2}";
+				}
 			}
-		}
 
-		if($j==0){
-			$doc['_id'] = ++$big;
-			$messages['id'] = 1;
-			$messages['sid'] = intval($sid);
-			$messages['message'] = $message;
-			$messages['date'] = $sDate;
-			$messages['time'] = $sTime;
+			if(($j==0)&&($cnt==1)){
+				$doc['_id'] = ++$big;
+				$doc['sid']  = intval($sid);
+				$messages['id'] = 1;
+				$messages['sid'] = intval($sid);
+				$messages['message'] = $message;
+				$messages['date'] = $sDate;
+				$messages['time'] = $sTime;
 
-			$doc['tdate'] = $sDate;
-			$doc['ttime'] = $sTime;
-			$doc['messages'] = $messages;
-			insertion("messaging",$doc);
-			return "{\"status\":1}";
+				$doc['tdate'] = $sDate;
+				$doc['ttime'] = $sTime;
+				$doc['messages'] = $messages;
+				insertion("messaging",$doc);
+				return "{\"status\":1}";
+			}
 		}
 	}
 
@@ -824,34 +867,40 @@
 
 	//Webservice function to get a message thread
 	function getMessage($susername,$rusername){
-		$doc = array();
-		$doc['susername'] = $susername;
-		$doc['rusername'] = $rusername;
-		$i = 0;
-
-		$str = "{\"messages\":[";
-		$cursor = selection("messaging",$doc);
-		foreach($cursor as $task)
-		{
-			foreach($task['messages'] as $value){
-				$str.="{\"id\":\"".$value['sid']."\",";	
-				$str.="\"message\":\"".$value['message']."\",";
-				$str.="\"date\":\"".$value['date']."\"},";
-				$i++;
+		for($k=0;$k<2;$k++){
+			$doc = array();
+			if($k==0){
+				$doc['susername'] = $susername;
+				$doc['rusername'] = $rusername;
+			}else{
+				$doc['susername'] = $rusername;
+				$doc['rusername'] = $susername;
 			}
-		}
+			$i = 0;
+			$str = "{\"messages\":[";
+			$cursor = selection("messaging",$doc);
+			foreach($cursor as $task)
+			{
+				foreach($task['messages'] as $value){
+					$str.="{\"id\":\"".$value['sid']."\",";	
+					$str.="\"message\":\"".$value['message']."\",";
+					$str.="\"date\":\"".$value['date']."\"},";
+					$i++;
+				}
+			}
 
-		if($i==0)
-		{
-			$str.="{}";
-		}
-		else
-		{
-			$str = rtrim($str, ",");
-		}
-		$str .= "]}";
+			if(($i==0)&&($k==1))
+			{
+				$str.="{}";
+			}
+			else
+			{
+				$str = rtrim($str, ",");
+			}
+			$str .= "]}";
 
-		return $str;
+			return $str;	
+		}
 	}
 
 	//Webservice to send message notification to the user
@@ -916,7 +965,7 @@
 		return $str;
 	}
 
-
+	//Webservice function to send notification
 	function sendnotification($gid, $msg,$description,$imsg,$eventId) {
         $registatoin_ids = array($gid);
 		$message = array("m" => $msg,"eventid" => $eventId,"description" => $description,"imsg" => $imsg);
