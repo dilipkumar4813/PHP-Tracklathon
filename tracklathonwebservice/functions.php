@@ -70,6 +70,21 @@
 		}
 	}
 
+	function checkUser($email){
+
+		$cursor = selection("users","");
+		foreach($cursor as $task)
+		{
+			if($task['username']==$email)
+			{
+				//Change status to 2 if email id is already registered and show toast message
+				return true;
+			}else{
+				return false;
+			}
+		}
+	}
+
 	//Webservice to change the password using the forgot password screen
 	function forgotPassword($id,$newPassword){
 		$sel = array();
@@ -841,7 +856,9 @@
 
 				$doc['tdate'] = $sDate;
 				$doc['ttime'] = $sTime;
-				$doc['messages'] = $messages;
+
+				//Verify this
+				$doc['messages'] = array($messages);
 				insertion("messaging",$doc);
 				return "{\"status\":1}";
 			}
@@ -963,6 +980,153 @@
 		$str .= "]}";
 
 		return $str;
+	}
+
+	//Webservice function to add contacts
+	function addContact($id,$ausername){
+		$doc = array();
+		$doc['userid'] = intval($id);
+		$storedContacts = array();
+		$contacts = array();
+		$str = "";
+
+		if(!checkUser($ausername)){
+			return "{\"status\":0}";
+		}
+
+		$cursor = selection("contacts","");
+		$big = 0;
+		foreach($cursor as $task)
+		{
+			$idd = intval($task['_id']);
+			if($idd>$big)
+			{
+				$big = $idd;
+			}
+
+			
+			if($id==$task['userid']){
+				$k=0;
+				foreach($task['contacts'] as $cnct){
+					
+					if($ausername==$cnct['username']){
+						return "{\"status\":0}";
+					}
+					$storedContacts['id'] = $cnct['id'];
+					$storedContacts['username'] = $cnct['username'];
+
+					array_push($contacts,$storedContacts);
+					unset($storedContacts);
+					++$k;
+				}
+
+				$newContact = array();
+				$newContact['id'] = ++$k;
+				$newContact['username'] = $ausername;
+				
+				array_push($contacts,$newContact);
+
+				$update = array();
+				$update['contacts'] = $contacts;
+						
+				updation("contacts",$doc,$update);			
+				
+				return "{\"status\":1}";
+			}
+			
+		}
+
+		if($big==0){
+			$doc['_id'] = ++$big;
+
+			$contacts['id'] = 1;
+			$contacts['username'] = $ausername;
+
+			$doc['contacts'] = array($contacts);
+			
+			insertion("contacts",$doc);	
+
+			return "{\"status\":1}";
+		}
+	}
+
+	//Webservice function to get Contacts
+	function getContacts($id){
+		$doc = array();
+		$doc['userid'] = intval($id);
+		$i=0;
+		$str = "{\"contacts\":[";
+
+		$cursor = selection("contacts",$doc);
+		foreach($cursor as $task)
+		{
+			foreach($task['contacts'] as $cnct){	
+				$sel = array();
+				$sel['username'] = $cnct['username'];
+
+				$phone = "";
+				$sid = "";
+				$cur = selection("users",$sel);
+
+				foreach($cur as $tsk){
+					$phone = $tsk['phone'];
+					$sid = $tsk['_id'];
+				}
+				$str.="{\"id\":\"".$cnct['id']."\",";	
+				$str.="\"username\":\"".$cnct['username']."\",";
+				$str.="\"sid\":\"".$sid."\",";
+				$str.="\"phone\":\"".$phone."\"},";
+				$i++;
+			}
+			
+		}
+
+		if($i==0)
+		{
+			$str.="{}";
+		}
+		else
+		{
+			$str = rtrim($str, ",");
+		}
+		$str .= "]}";
+
+		return $str;
+	}
+
+	//Webservice function to remove contact
+	function deleteContact($id,$ausername){
+		$doc = array();
+		$doc['userid'] = intval($id);
+		$storedContacts = array();
+		$contacts = array();
+		$i=0;
+		
+		$cursor = selection("contacts",$doc);
+		foreach($cursor as $task)
+		{
+			foreach($task['contacts'] as $cnct){
+					
+				if($ausername==$cnct['username']){
+					$i++;
+					continue;
+				}
+				$storedContacts['id'] = $cnct['id'];
+				$storedContacts['username'] = $cnct['username'];
+
+				array_push($contacts,$storedContacts);
+				unset($storedContacts);
+			}
+			if($i==0){
+				return "{\"status\":0}";
+			}
+			$update = array();
+			$update['contacts'] = $contacts;
+						
+			updation("contacts",$doc,$update);			
+				
+			return "{\"status\":1}";
+		}
 	}
 
 	//Webservice function to send notification

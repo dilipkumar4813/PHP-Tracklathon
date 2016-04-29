@@ -106,4 +106,16 @@
 	echo "<br/><br/><b>Get message inbox webservice</b><br/>";
 	$res1=$client->call('getMessageInbox',array("ta"));
 	print_r($res1);
+
+	echo "<br/><br/><b>Get message inbox webservice</b><br/>";
+	$res1=$client->call('addContact',array("1","dilip"));
+	print_r($res1);	
+
+	echo "<br/><br/><b>Get contacts webservice</b><br/>";
+	$res1=$client->call('getContacts',array("1"));
+	print_r($res1);	
+
+	echo "<br/><br/><b>Get contacts webservice</b><br/>";
+	$res1=$client->call('deleteContact',array("1","ta"));
+	print_r($res1);	
 ?>

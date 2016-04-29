@@ -167,6 +167,24 @@
 				array("return"=>"xsd:string") //Ouput datatype
 			);
 
+	$server->register(
+				'addContact',	//Function that is being called
+				array("id"=>"xsd:string","ausername"=>"xsd:string"),
+				array("return"=>"xsd:string") //Ouput datatype
+			);
+
+	$server->register(
+				'getContacts',	//Function that is being called
+				array("id"=>"xsd:string"),
+				array("return"=>"xsd:string") //Ouput datatype
+			);
+
+	$server->register(
+				'deleteContact',	//Function that is being called
+				array("id"=>"xsd:string","ausername"=>"xsd:string"),
+				array("return"=>"xsd:string") //Ouput datatype
+			);
+
 	$HTTP_RAW_POST_DATA = isset($HTTP_RAW_POST_DATA)? $HTTP_RAW_POST_DATA : '';
 	$server->service($HTTP_RAW_POST_DATA); 
 ?>
